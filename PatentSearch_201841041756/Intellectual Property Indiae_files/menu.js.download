@@ -1,0 +1,15 @@
+﻿var RootDir = '';
+$(document).ready(function () {
+    var href = document.location.href;
+    var lastPathSegment = href.substr(href.lastIndexOf('/') + 1);
+    $('li').removeClass("active");
+   
+    if (lastPathSegment == '' || lastPathSegment == 'Search' || lastPathSegment == 'publicsearch') {
+      
+        $("#Index").addClass("active");
+    }
+    else {
+      
+        $("#" + lastPathSegment).addClass("active");
+    }
+});

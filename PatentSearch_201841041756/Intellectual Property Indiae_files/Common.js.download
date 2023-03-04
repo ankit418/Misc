@@ -1,0 +1,73 @@
+﻿
+var RootDir1 = '/PublicSearch';
+//var RootDir1 = '';
+$(document).on('keypress', ".Int", function (evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if ((charCode > 36 && charCode < 39) || (charCode > 47 && charCode <= 57) || charCode == 8)
+        return true;
+    return false;
+});
+$(document).on('keypress', ".Decimal", function (evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if ((charCode > 36 && charCode < 39) || (charCode > 45 && charCode <= 57) || charCode == 8)
+        return true;
+    return false;
+});
+$(document).on("focus", ".DateTime", function () {
+    $(this).datepicker({
+        format: "dd/M/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    });
+
+});
+function Validate(seed) {
+    if ($('#Password').val() != '' && $('#UserName').val() != '') {
+        var loginId = $('#UserName').val();
+        var Pass = $('#Password').val();
+        var finalpass;
+        var sha1pass = hex_sha1(Pass);
+        finalpass = sha1pass + seed;
+        var sha1final = hex_sha1(finalpass);
+        $('#Password').val(sha1final);
+    }
+}
+function ValidateResetPassword(seed) {
+    if ($('#NewPassword').val() != '' && $('#UserName').val() != '') {
+        var loginId = $('#UserName').val();
+        var NewPass = $('#NewPassword').val();
+        var ConfPass = $('#ConfirmPassword').val();
+        var sha1Newpass = hex_sha1(NewPass);
+        $('#NewPassword').val(sha1Newpass);
+        var sha1ConfPass = hex_sha1(ConfPass);
+        $('#ConfirmPassword').val(sha1ConfPass);
+    }
+}
+
+
+function CaptchaLoad() {
+
+    $("#Captcha").attr("src", RootDir1 + '/Captcha' + "/" + 'GetCaptchaImage')
+
+}
+function CaptchaAudio() {
+
+    $.ajax({
+        url: RootDir1 + '/Captcha' + "/" + 'CaptchaAudio',
+        success: function (response) {
+            var Array = response.CaptchaImageText.split('')
+            $.each(Array, function (index, value) {
+                var msg = new SpeechSynthesisUtterance(value);
+                window.speechSynthesis.speak(msg);
+             
+            })
+            
+
+        }, error: function (response) {
+
+            alert("Some server issue is there");
+
+        }
+    });
+
+}
